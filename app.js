@@ -7,10 +7,13 @@ $ (function () {
   const $taskInput = $ ('#task');
 
   // Load all event listeners
-  loadEventListeners();
+  loadEventListeners ();
 
   function loadEventListeners () {
     $form.submit (addTask);
+    $taskList.click ('i', removeTask);
+    $clearBtn.click (clearTasks);
+    $filter.keyup (filterTasks);
   }
 
   function addTask (e) {
@@ -34,5 +37,27 @@ $ (function () {
     // Clear text input
     $taskInput.val ('');
     e.preventDefault ();
+  }
+
+  // Remove Task
+  function removeTask (e) {
+    if (e.target.parentElement.classList.contains ('delete-item')) {
+      if (confirm ('Are You Sure?')) {
+        e.target.closest ('li').remove ();
+      }
+    }
+  }
+
+  // Clear Tasks
+  function clearTasks () {
+    $taskList.empty ();
+  }
+
+  // FilterTasks
+  function filterTasks () {
+    const value = $ (this).val ().toLowerCase ();
+    $ ('.collection-item').filter (function () {
+      $ (this).toggle ($ (this).text ().toLowerCase ().indexOf (value) > -1);
+    });
   }
 });
